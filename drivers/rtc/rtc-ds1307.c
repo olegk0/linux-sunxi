@@ -945,7 +945,14 @@ static int __devexit ds1307_remove(struct i2c_client *client)
 	return 0;
 }
 
+/* Addresses to scan */
+static union{
+	unsigned short dirty_addr_buf[2];
+	const unsigned short normal_i2c[2];
+}u_i2c_addr = {{0x00},};
+
 static struct i2c_driver ds1307_driver = {
+	.class = I2C_CLASS_HWMON,
 	.driver = {
 		.name	= "rtc-ds1307",
 		.owner	= THIS_MODULE,
@@ -953,9 +960,63 @@ static struct i2c_driver ds1307_driver = {
 	.probe		= ds1307_probe,
 	.remove		= __devexit_p(ds1307_remove),
 	.id_table	= ds1307_id,
+	.address_list	= u_i2c_addr.normal_i2c,
 };
+//IAM only ds1307
+#define twi_addr 0x68
+#define twi_id 1
+#define RTC_NAME "ds1307"
 
-module_i2c_driver(ds1307_driver);
+/**
+ * rtc_detect - Device detection callback for automatic device creation
+ * return value:
+ *                    = 0; success;
+ *                    < 0; err
+ */
+int rtc_detect(struct i2c_client *client, struct i2c_board_info *info)
+{
+	struct i2c_adapter *adapter = client->adapter;
+printk("%s,line:%d,twi_id:%d,adapter->nr:%d\n", __func__, __LINE__,twi_id,adapter->nr);
+	if(twi_id == adapter->nr)
+	{
+		pr_info("%s: Detected chip %s at adapter %d, address 0x%02x\n",\
+			 __func__, RTC_NAME, i2c_adapter_id(adapter), client->addr);
+printk("%s,line:%d\n", __func__, __LINE__);
+		strlcpy(info->type, RTC_NAME, I2C_NAME_SIZE);
+		return 0;
+	}else{
+		printk("%s,line:%d\n", __func__, __LINE__);
+		return -ENODEV;
+	}
+}
+
+static int __init ds1307_init(void)
+{
+/*	if(rtc_fetch_sysconfig_para()){
+		printk("%s,line:%d,err\n\n", __func__,__LINE__);
+		return -1;
+	}
+*/
+	u_i2c_addr.dirty_addr_buf[0] = twi_addr;
+	u_i2c_addr.dirty_addr_buf[1] = I2C_CLIENT_END;
+
+	printk("%s: params:  normal_i2c: 0x%hx. normal_i2c[1]: 0x%hx \n", \
+	__func__, u_i2c_addr.normal_i2c[0], u_i2c_addr.normal_i2c[1]);
+
+	ds1307_driver.detect = rtc_detect;
+
+	return i2c_add_driver(&ds1307_driver);
+}
+
+static void __exit ds1307_exit(void)
+{
+	i2c_del_driver(&ds1307_driver);
+}
+
+//module_i2c_driver(ds1307_driver);
 
 MODULE_DESCRIPTION("RTC driver for DS1307 and similar chips");
 MODULE_LICENSE("GPL");
+
+module_init(ds1307_init);
+module_exit(ds1307_exit);
