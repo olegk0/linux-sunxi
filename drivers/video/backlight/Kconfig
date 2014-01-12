@@ -361,6 +361,13 @@ config BACKLIGHT_PANDORA
 	  If you have a Pandora console, say Y to enable the
 	  backlight driver.
 
+config BACKLIGHT_SUNXI_PWM
+	tristate "Backlight driver for sunxi_pwm"
+	depends on BACKLIGHT_CLASS_DEVICE && FB_SUNXI
+	help
+	  To compile this driver as a module, choose M here: the module will be
+	  called sunxipwm_bl.
+
 endif # BACKLIGHT_CLASS_DEVICE
 
 endif # BACKLIGHT_LCD_SUPPORT
