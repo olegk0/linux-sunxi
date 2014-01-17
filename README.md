@@ -1,11 +1,11 @@
 for my experiments with сubieboard2
 
 
-what I wanna do...
+I want to do and what has been done
 
-https://drive.google.com/file/d/0B6QRwjacGTzCUlk0ZWZvQ0JJZGc/edit?usp=sharing
+https://drive.google.com/folderview?id=0B6QRwjacGTzCM213V2ItR3AzMmc&usp=sharing
 
 
-Project folder
+Project top folder
 
 https://drive.google.com/folderview?id=0B6QRwjacGTzCZHpfQVFEWi1yYkk&usp=sharing
