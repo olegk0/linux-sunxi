@@ -264,10 +264,12 @@ motor_used = 0
 motor_shake = port:PB03<1><default><default><1>
 
 [gpio_para]
-gpio_used = 1
-gpio_num = 2
-gpio_pin_1 = port:PH14<0><default><default><default>
-gpio_pin_2 = port:PH15<0><default><default><default>
+gpio_used = 0
+gpio_num = 1
+gpio_pin_1 = port:PG00<0><default><default><default>
+
+[power_para]
+ac_status_pin = port:PE11<0><default><default><default>
 
 [nand_para]
 nand_used = 1
@@ -724,7 +726,7 @@ usb_detect_type = 0
 usb_id_gpio = port:PH04<0><1><default><default>
 usb_det_vbus_gpio = port:PH05<0><0><default><default>
 usb_drv_vbus_gpio = port:PB09<1><0><default><0>
-usb_host_init_state = 0
+usb_host_init_state = 1
 
 [usbc1]
 usb_used = 1
@@ -952,20 +954,22 @@ key_max = 40
 [dvfs_table]
 max_freq = 1200000000
 min_freq = 400000000
-LV_count = 8
-LV5_freq = 1200000000
-LV5_volt = 1500
-LV1_freq = 1008000000
-LV1_volt = 1450
-LV2_freq = 912000000
-LV2_volt = 1400
-LV3_freq = 864000000
-LV3_volt = 1300
-LV4_freq = 720000000
-LV4_volt = 1200
-LV5_freq = 528000000
-LV5_volt = 1100
-LV6_freq = 312000000
-LV6_volt = 1050
-LV7_freq = 144000000
-LV7_volt = 1050
+LV_count = 9
+LV1_freq = 1200000000
+LV1_volt = 1550
+LV2_freq = 1100000000
+LV2_volt = 1500
+LV3_freq = 1008000000
+LV3_volt = 1450
+LV4_freq = 912000000
+LV4_volt = 1400
+LV5_freq = 864000000
+LV5_volt = 1300
+LV6_freq = 720000000
+LV6_volt = 1200
+LV7_freq = 528000000
+LV7_volt = 1100
+LV8_freq = 312000000
+LV8_volt = 1050
+LV9_freq = 144000000
+LV9_volt = 1050
