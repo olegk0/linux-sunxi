@@ -67,13 +67,24 @@ struct sux7i_lradc_data {
 	struct resource *mem;
 };
 
+struct sux7i_lradc_data lradc_data;
+
+int get_raw_lradc0(void)
+{
+    if(lradc_data.base)
+	return(readl(lradc_data.base + LRADC_DATA0));
+    else
+	return(-1);
+}
+EXPORT_SYMBOL(get_raw_lradc0);
+
 static ssize_t show_in_input(struct device *dev, struct device_attribute *attr,
 		char *buf)
 {
-	struct sux7i_lradc_data *data = dev_get_drvdata(dev);
+//	struct sux7i_lradc_data *data = dev_get_drvdata(dev);
 	int in_input;
 
-	in_input = readl(data->base + LRADC_DATA0);
+	in_input = get_raw_lradc0();
 
 	return sprintf(buf, "%d\n", in_input);
 }
@@ -107,7 +118,9 @@ static int sun7i_lradc_probe(struct platform_device *pdev)
 	struct sux7i_lradc_data *data = NULL;
 //	struct device *dev = &pdev->dev;
 
-	data = kzalloc(sizeof(struct sux7i_lradc_data), GFP_KERNEL);
+//	data = kzalloc(sizeof(struct sux7i_lradc_data), GFP_KERNEL);
+	data = &lradc_data;
+	data->base = NULL;
 	if (!data)
 		return -ENOMEM;
 
@@ -158,7 +171,8 @@ exit_unset:
 exit_release_mem:
 	release_mem_region(data->mem->start, resource_size(data->mem));
 exit_free:
-	kfree(data);
+//	kfree(data);
+	data = NULL;
 	return err;
 }
 
@@ -171,8 +185,8 @@ static int __devexit sun7i_lradc_remove(struct platform_device *pdev)
 	sysfs_remove_file(&pdev->dev.kobj, &dev_attr_in0_input.attr);
 	release_mem_region(data->mem->start, resource_size(data->mem));
         platform_set_drvdata(pdev, NULL);
-        kfree(data);
-
+	data = NULL;
+//        kfree(data);
 	return 0;
 }
 
@@ -219,3 +233,4 @@ module_exit(sun7i_lradc_exit);
 MODULE_AUTHOR("<olegvedi@gmail.com>");
 MODULE_DESCRIPTION("SUN7i LRDAC input");
 MODULE_LICENSE("GPL");
+MODULE_ALIAS("platform:sun7i_lradc-input");
