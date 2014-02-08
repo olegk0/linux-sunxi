@@ -315,4 +315,11 @@ config AB8500_BATTERY_THERM_ON_BATCTRL
 	help
 	  Say Y to enable battery temperature measurements using
 	  thermistor connected on BATCTRL ADC.
+
+config BATTERY_MYCB
+	tristate "My CubieBook battery driver"
+	depends on SENSORS_SUN7ILRDAC
+	help
+	  Say Y to enable battery control on my CubieBook.
+
 endif # POWER_SUPPLY
